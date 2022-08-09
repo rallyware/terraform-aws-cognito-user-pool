@@ -19,7 +19,7 @@ resource "aws_cognito_user_pool_domain" "default" {
 }
 
 resource "aws_cognito_identity_provider" "default" {
-  for_each = { for provider in var.identity_providers : provier.name => provider }
+  for_each = { for provider in var.identity_providers : provider.name => provider }
 
   user_pool_id      = local.user_pool_id
   provider_name     = each.value.name
