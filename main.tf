@@ -1,6 +1,12 @@
 locals {
   enabled      = module.this.enabled
   user_pool_id = one(aws_cognito_user_pool.default[*].id)
+  region       = one(data.aws_region.default[*].name)
+  domain       = one(aws_cognito_user_pool.default[*].domain)
+}
+
+data "aws_region" "default" {
+  count = local.enabled ? 1 : 0
 }
 
 resource "aws_cognito_user_pool" "default" {
@@ -34,7 +40,7 @@ resource "aws_cognito_user_pool_domain" "default" {
 }
 
 resource "aws_cognito_identity_provider" "default" {
-  for_each = { for provider in var.identity_providers : provider.name => provider }
+  for_each = local.enabled ? { for provider in var.identity_providers : provider.name => provider } : {}
 
   user_pool_id      = local.user_pool_id
   provider_name     = each.value.name
@@ -42,4 +48,13 @@ resource "aws_cognito_identity_provider" "default" {
   provider_details  = each.value.provider_details
   attribute_mapping = each.value.attribute_mapping
   idp_identifiers   = each.value.idp_identifiers
+}
+
+resource "aws_cognito_user_group" "default" {
+  for_each = local.enabled ? { for group in var.groups : group.name => group } : {}
+
+  name         = each.value.name
+  user_pool_id = local.user_pool_id
+  description  = "Managed by Terraform"
+  precedence   = each.value.precedence
 }

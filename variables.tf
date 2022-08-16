@@ -64,3 +64,14 @@ variable "identity_providers" {
   default     = []
   description = "A list of identity providers to associate with Cognito user pool."
 }
+
+variable "groups" {
+  type = list(object(
+    {
+      name       = string
+      precedence = number
+    }
+  ))
+  default     = []
+  description = "A list of Cognito user groups to create."
+}

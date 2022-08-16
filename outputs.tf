@@ -9,7 +9,7 @@ output "custom_domain" {
 }
 
 output "domain" {
-  value       = one(aws_cognito_user_pool.default[*].domain)
+  value       = local.domain
   description = "Holds the domain prefix if the user pool has a domain associated with it."
 }
 
@@ -41,4 +41,39 @@ output "cloudfront_distribution_arn" {
 output "s3_bucket" {
   value       = one(aws_cognito_user_pool_domain.default[*].s3_bucket)
   description = "The S3 bucket where the static files for this domain are stored."
+}
+
+output "issuer_url" {
+  value       = local.enabled ? format("https://%s", one(aws_cognito_user_pool.default[*].endpoint)) : ""
+  description = "Cognito issuer URL"
+}
+
+output "auth_url" {
+  value       = local.enabled ? format("https://%s.auth.%s.amazoncognito.com/oauth2/authorize", local.domain, local.region) : ""
+  description = "Cognito auth URL"
+}
+
+output "token_url" {
+  value       = local.enabled ? format("https://%s.auth.%s.amazoncognito.com/oauth2/token", local.domain, local.region) : ""
+  description = "Cognito token URL"
+}
+
+output "userinfo_url" {
+  value       = local.enabled ? format("https://%s.auth.%s.amazoncognito.com/oauth2/userInfo", local.domain, local.region) : ""
+  description = "Cognito userInfo URL"
+}
+
+output "revoke_url" {
+  value       = local.enabled ? format("https://%s.auth.%s.amazoncognito.com/oauth2/revoke", local.domain, local.region) : ""
+  description = "Cognito revoke URL"
+}
+
+output "login_url" {
+  value       = local.enabled ? format("https://%s.auth.%s.amazoncognito.com/login", local.domain, local.region) : ""
+  description = "Cognito login URL"
+}
+
+output "logout_url" {
+  value       = local.enabled ? format("https://%s.auth.%s.amazoncognito.com/logout", local.domain, local.region) : ""
+  description = "Cognito logout URL"
 }
