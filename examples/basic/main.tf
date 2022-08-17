@@ -1,6 +1,7 @@
-module "aweasome_module" {
-  source    = "../../"
+module "cognito_basic" {
+  source = "../../"
+
   name      = "aweasome"
   stage     = "production"
-  namespace = "sweetops"
+  namespace = "rlw"
 }

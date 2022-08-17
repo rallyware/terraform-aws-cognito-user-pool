@@ -16,7 +16,9 @@ output:
   file: README.md
   mode: replace
   template: |-
-    # terraform-module-template
+    # terraform-aws-cognito
+
+    Terraform module to provision and manage AWS Cognito user pool. 
 
     <!-- BEGIN_TF_DOCS -->
     {{ .Content }}
